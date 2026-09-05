@@ -22,8 +22,8 @@ export const Route = createFileRoute("/progress")({
 });
 
 function Progress() {
-  const { streak } = useSession();
-  const [view, setView] = useState<"patient" | "clinician">("patient");
+  const { streak, role } = useSession();
+  const view = role;
   const [exported, setExported] = useState(false);
 
   return (
@@ -31,23 +31,15 @@ function Progress() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-medium tracking-tight">Progress</h1>
-          <p className="mt-1 text-muted-foreground">The record of your recovery, in your own voice.</p>
+          <p className="mt-1 text-muted-foreground">
+            {view === "patient"
+              ? "The record of your recovery, in your own voice."
+              : "Session-level detail for the patient you are reviewing."}
+          </p>
         </div>
-        <div className="inline-flex rounded-lg border border-border bg-card p-1" role="tablist" aria-label="Report view">
-          {(["patient", "clinician"] as const).map((v) => (
-            <button
-              key={v}
-              role="tab"
-              aria-selected={view === v}
-              onClick={() => setView(v)}
-              className={`kiwi-transition min-h-11 rounded-md px-5 font-medium ${
-                view === v ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"
-              }`}
-            >
-              {v === "patient" ? "My view" : "Clinician view"}
-            </button>
-          ))}
-        </div>
+        <p className="rounded-full bg-card px-4 py-2 text-[0.9rem] text-muted-foreground">
+          {view === "patient" ? "Your own summary" : "Clinician report — Anand K."}
+        </p>
       </div>
 
       {view === "patient" ? (

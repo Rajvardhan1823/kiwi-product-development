@@ -30,10 +30,17 @@ export const Route = createFileRoute("/")({
 
 function Onboarding() {
   const [step, setStep] = useState(0);
-  const { presetId, setPresetId, completeOnboarding } = useSession();
+  const { presetId, setPresetId, completeOnboarding, setRole } = useSession();
   const navigate = useNavigate();
 
+  const enterClinician = () => {
+    setRole("clinician");
+    completeOnboarding();
+    navigate({ to: "/dashboard" });
+  };
+
   const finish = () => {
+    setRole("patient");
     completeOnboarding();
     // Onboarding ends on the Practice Studio — never a blank home screen.
     navigate({ to: "/practice" });
@@ -71,30 +78,38 @@ function Onboarding() {
               what it hears — honestly and kindly — so your progress is real, and yours.
             </p>
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <UserRound className="h-6 w-6 text-primary" aria-hidden="true" />
-                <h2 className="mt-3 text-lg font-medium">For you, the person practising</h2>
-                <p className="mt-1 text-[0.95rem] text-muted-foreground">
-                  One task at a time. No timers, no pressure. Your recordings stay on this device.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <Stethoscope className="h-6 w-6 text-primary" aria-hidden="true" />
-                <h2 className="mt-3 text-lg font-medium">For your clinician</h2>
-                <p className="mt-1 text-[0.95rem] text-muted-foreground">
-                  Clear, honest logs of every session — not guesswork from memory.
-                </p>
-              </div>
-            </div>
-            <div className="mt-10 flex justify-end">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground hover:opacity-90"
+                className="kiwi-transition rounded-2xl border-2 border-border bg-card p-6 text-left hover:border-primary"
               >
-                Continue <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                <UserRound className="h-6 w-6 text-primary" aria-hidden="true" />
+                <h2 className="mt-3 text-lg font-medium">I'm here to practise</h2>
+                <p className="mt-1 text-[0.95rem] text-muted-foreground">
+                  One task at a time. No timers, no pressure. Your recordings stay on this device.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-2 font-medium text-primary">
+                  Set up my practice <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={enterClinician}
+                className="kiwi-transition rounded-2xl border-2 border-border bg-card p-6 text-left hover:border-foreground"
+              >
+                <Stethoscope className="h-6 w-6 text-foreground" aria-hidden="true" />
+                <h2 className="mt-3 text-lg font-medium">I'm a clinician</h2>
+                <p className="mt-1 text-[0.95rem] text-muted-foreground">
+                  Clear, honest logs of every session — not guesswork from memory.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-2 font-medium">
+                  Open my caseload <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                </span>
               </button>
             </div>
+            <p className="mt-6 text-center text-[0.9rem] text-muted-foreground">
+              No sign-in — pick a view now and switch any time from the bar at the top.
+            </p>
           </section>
         )}
 

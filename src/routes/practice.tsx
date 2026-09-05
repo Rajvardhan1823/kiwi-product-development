@@ -7,6 +7,15 @@ import { PresetCard } from "@/components/PresetCard";
 import { WaveformBloom } from "@/components/WaveformBloom";
 import { ASSIGNED_READING, DRILL_SENTENCES, MOCK_TRANSCRIPT, PRESETS, presetById } from "@/lib/data";
 import { useSession } from "@/lib/session";
+import {
+  compareToReference,
+  dictationSupported,
+  speak,
+  speechSupported,
+  startDictation,
+  startMicLevel,
+  stopSpeaking,
+} from "@/lib/speech";
 
 export const Route = createFileRoute("/practice")({
   head: () => ({
@@ -33,11 +42,44 @@ function PracticeStudio() {
   const [drill, setDrill] = useState<{ word: string; sentences: string[] } | null>(null);
   const [loopIndex, setLoopIndex] = useState(0);
   const sessionCounted = useRef(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [level, setLevel] = useState(0);
+  const [micError, setMicError] = useState<string | null>(null);
+  const [liveWords, setLiveWords] = useState<string[]>([]);
+  const [usedMic, setUsedMic] = useState(false);
+  const [liveWordsOn, setLiveWordsOn] = useState(false);
+  const micRef = useRef<{ stop: () => void } | null>(null);
+  const dictRef = useRef<{ stop: () => void } | null>(null);
 
-  // Near-live transcript: reveal words one at a time while recording.
+  const stopEverything = () => {
+    micRef.current?.stop();
+    micRef.current = null;
+    dictRef.current?.stop();
+    dictRef.current = null;
+    setLevel(0);
+  };
+
+  useEffect(() => () => {
+    stopEverything();
+    stopSpeaking();
+  }, []);
+
+  const play = (text: string) => {
+    if (!speechSupported()) return;
+    setSpeaking(true);
+    void speak(text, { onEnd: () => setSpeaking(false) });
+  };
+
+  // Live transcript from the microphone, compared with the reference reading.
+  const liveTranscript = useMemo(
+    () => (liveWordsOn ? compareToReference(ASSIGNED_READING.text, liveWords) : []),
+    [liveWordsOn, liveWords],
+  );
+
+  // Simulated transcript (used only when the browser can't do live dictation).
   const [visibleCount, setVisibleCount] = useState(0);
   useEffect(() => {
-    if (phase !== "recording") return;
+    if (phase !== "recording" || liveWordsOn) return;
     if (visibleCount >= MOCK_TRANSCRIPT.length) {
       const t = setTimeout(() => {
         setPhase("done");
@@ -50,19 +92,43 @@ function PracticeStudio() {
     }
     const t = setTimeout(() => setVisibleCount((c) => c + 1), 650);
     return () => clearTimeout(t);
-  }, [phase, visibleCount, completeSession]);
+  }, [phase, visibleCount, completeSession, liveWordsOn]);
 
-  const startRecording = () => {
+  const startRecording = async () => {
+    stopSpeaking();
+    setSpeaking(false);
     setVisibleCount(0);
+    setLiveWords([]);
+    setMicError(null);
     setFlaggedPassage(false);
     setDrill(null);
+    sessionCounted.current = false;
+    try {
+      micRef.current = await startMicLevel(setLevel);
+      setUsedMic(true);
+      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words)) : null;
+      dictRef.current = dict;
+      setLiveWordsOn(Boolean(dict));
+    } catch {
+      setUsedMic(false);
+      setLiveWordsOn(false);
+      setMicError("Kiwi couldn't reach your microphone, so this run is a simulated demo.");
+    }
     setPhase("recording");
   };
 
-  const flaggedWords = useMemo(
-    () => MOCK_TRANSCRIPT.slice(0, visibleCount).filter((w) => w.flag),
-    [visibleCount],
-  );
+  const stopRecording = () => {
+    stopEverything();
+    setPhase("done");
+    if (!sessionCounted.current) {
+      sessionCounted.current = true;
+      completeSession();
+    }
+  };
+
+  const shownTranscript = liveWordsOn ? liveTranscript : MOCK_TRANSCRIPT.slice(0, visibleCount);
+
+  const flaggedWords = useMemo(() => shownTranscript.filter((w) => w.flag), [shownTranscript]);
 
   const openDrill = (word: string) => {
     const key = word.toLowerCase().replace(/[^a-z]/g, "");
@@ -99,15 +165,20 @@ function PracticeStudio() {
             <button
               type="button"
               aria-label="Play reference audio"
+              onClick={() => (speaking ? (stopSpeaking(), setSpeaking(false)) : play(ASSIGNED_READING.text))}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg bg-secondary px-4 py-2 font-medium text-secondary-foreground hover:opacity-90"
             >
-              <Play className="h-5 w-5" aria-hidden="true" /> Listen first
+              {speaking ? <Square className="h-5 w-5" aria-hidden="true" /> : <Play className="h-5 w-5" aria-hidden="true" />}
+              {speaking ? "Stop audio" : "Listen first"}
             </button>
           </div>
           <p className="mt-5 text-2xl leading-relaxed">{ASSIGNED_READING.text}</p>
           <p className="mt-4 text-[0.9rem] text-muted-foreground">
             No timer, no countdown. Start whenever you're ready, stop whenever you like.
           </p>
+          {micError && (
+            <p className="mt-2 text-[0.9rem] font-medium text-flag-foreground">{micError}</p>
+          )}
         </section>
 
         <section aria-labelledby="record-heading" className="flex flex-col rounded-2xl border border-border bg-card p-8">
@@ -115,7 +186,12 @@ function PracticeStudio() {
             {phase === "recording" ? "Listening…" : phase === "done" ? "Session complete" : "Ready when you are"}
           </h2>
           <div className="mt-4 flex-1 rounded-xl bg-muted px-4 py-6">
-            <WaveformBloom active={phase === "recording"} height={64} bars={32} />
+            <WaveformBloom
+              active={phase === "recording" || speaking}
+              level={phase === "recording" && usedMic ? level : undefined}
+              height={64}
+              bars={32}
+            />
           </div>
           {phase === "done" && (
             <p className="mt-4 inline-flex items-center gap-2 text-[0.95rem] font-medium text-sage-foreground">
@@ -136,7 +212,7 @@ function PracticeStudio() {
             ) : (
               <button
                 type="button"
-                onClick={() => setPhase("done")}
+                onClick={stopRecording}
                 className="kiwi-transition inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-primary bg-card px-6 py-3.5 text-lg font-medium text-primary hover:bg-accent"
               >
                 <Square className="h-5 w-5" aria-hidden="true" /> Stop
@@ -167,7 +243,7 @@ function PracticeStudio() {
         ) : (
           <>
             <p className="mt-5 flex flex-wrap gap-x-2.5 gap-y-4 text-2xl leading-relaxed" aria-live="polite">
-              {MOCK_TRANSCRIPT.slice(0, visibleCount).map((w, i) =>
+              {shownTranscript.map((w, i) =>
                 w.flag ? (
                   <button
                     key={i}
@@ -211,6 +287,7 @@ function PracticeStudio() {
           <div className="mt-3 flex flex-wrap gap-3">
             <button
               type="button"
+              onClick={() => play(ASSIGNED_READING.text)}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg border border-input bg-card px-4 py-2.5 font-medium hover:bg-accent"
             >
               <Play className="h-4.5 w-4.5" aria-hidden="true" /> Replay reference audio
@@ -272,7 +349,10 @@ function PracticeStudio() {
                 <li key={i}>
                   <button
                     type="button"
-                    onClick={() => setLoopIndex(i)}
+                    onClick={() => {
+                      setLoopIndex(i);
+                      play(s);
+                    }}
                     aria-pressed={loopIndex === i}
                     className={`kiwi-transition w-full rounded-xl border-2 px-5 py-4 text-left text-xl leading-relaxed min-h-11 ${
                       loopIndex === i ? "border-primary bg-accent" : "border-border bg-card hover:bg-muted"
@@ -285,7 +365,7 @@ function PracticeStudio() {
               ))}
             </ol>
             <div className="mt-6 flex items-center justify-between">
-              <WaveformBloom active height={36} bars={20} />
+              <WaveformBloom active={speaking} height={36} bars={20} />
               <button
                 type="button"
                 onClick={() => setDrill(null)}

@@ -1,7 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { ASSIGNED_READING } from "./data";
 
+export type Role = "patient" | "clinician";
+
 interface SessionState {
+  role: Role;
+  setRole: (r: Role) => void;
   presetId: string;
   setPresetId: (id: string) => void;
   onboarded: boolean;
@@ -17,6 +21,7 @@ const SessionContext = createContext<SessionState | null>(null);
 const KEY = "kiwi-session-v1";
 
 export function SessionProvider({ children }: { children: ReactNode }) {
+  const [role, setRoleState] = useState<Role>("patient");
   const [presetId, setPresetIdState] = useState(ASSIGNED_READING.recommendedPreset);
   const [onboarded, setOnboarded] = useState(false);
   const [streak, setStreak] = useState(12);
@@ -28,6 +33,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
+        if (parsed.role === "patient" || parsed.role === "clinician") setRoleState(parsed.role);
         if (parsed.presetId) setPresetIdState(parsed.presetId);
         if (typeof parsed.onboarded === "boolean") setOnboarded(parsed.onboarded);
         if (typeof parsed.streak === "number") setStreak(parsed.streak);
@@ -40,19 +46,24 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const persist = useCallback(
-    (next: Partial<{ presetId: string; onboarded: boolean; streak: number; sessionsCompleted: number }>) => {
+    (next: Partial<{ role: Role; presetId: string; onboarded: boolean; streak: number; sessionsCompleted: number }>) => {
       try {
-        const current = { presetId, onboarded, streak, sessionsCompleted };
+        const current = { role, presetId, onboarded, streak, sessionsCompleted };
         localStorage.setItem(KEY, JSON.stringify({ ...current, ...next }));
       } catch {
         // ignore
       }
     },
-    [presetId, onboarded, streak, sessionsCompleted],
+    [role, presetId, onboarded, streak, sessionsCompleted],
   );
 
   const value = useMemo<SessionState>(
     () => ({
+      role,
+      setRole: (r: Role) => {
+        setRoleState(r);
+        persist({ role: r });
+      },
       presetId,
       setPresetId: (id) => {
         setPresetIdState(id);
@@ -74,7 +85,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       },
       hydrated,
     }),
-    [presetId, onboarded, streak, sessionsCompleted, hydrated, persist],
+    [role, presetId, onboarded, streak, sessionsCompleted, hydrated, persist],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
