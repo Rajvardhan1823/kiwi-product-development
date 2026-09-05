@@ -2,7 +2,7 @@ interface Props {
   /** Bars animate outward while the patient speaks. */
   active?: boolean;
   /** Live microphone loudness, 0–1. When given, bars follow the real voice. */
-  level?: number;
+  level?: number | undefined;
   /** Index of the bar that carries the example flag marker. */
   flagAt?: number;
   height?: number;
