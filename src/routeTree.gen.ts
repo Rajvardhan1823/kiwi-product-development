@@ -10,13 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as PracticeRouteImport } from './routes/practice'
+import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as TargetBankRouteImport } from './routes/target-bank'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -29,6 +36,11 @@ const PracticeRoute = PracticeRouteImport.update({
   path: '/practice',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TargetBankRoute = TargetBankRouteImport.update({
   id: '/target-bank',
   path: '/target-bank',
@@ -37,35 +49,51 @@ const TargetBankRoute = TargetBankRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/practice': typeof PracticeRoute
+  '/progress': typeof ProgressRoute
   '/target-bank': typeof TargetBankRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/practice': typeof PracticeRoute
+  '/progress': typeof ProgressRoute
   '/target-bank': typeof TargetBankRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/home': typeof HomeRoute
   '/practice': typeof PracticeRoute
+  '/progress': typeof ProgressRoute
   '/target-bank': typeof TargetBankRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/practice' | '/target-bank'
+  fullPaths:
+    '/' | '/dashboard' | '/home' | '/practice' | '/progress' | '/target-bank'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/practice' | '/target-bank'
-  id: '__root__' | '/' | '/home' | '/practice' | '/target-bank'
+  to: '/' | '/dashboard' | '/home' | '/practice' | '/progress' | '/target-bank'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/home'
+    | '/practice'
+    | '/progress'
+    | '/target-bank'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   HomeRoute: typeof HomeRoute
   PracticeRoute: typeof PracticeRoute
+  ProgressRoute: typeof ProgressRoute
   TargetBankRoute: typeof TargetBankRoute
 }
 
@@ -76,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -92,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/target-bank': {
       id: '/target-bank'
       path: '/target-bank'
@@ -104,8 +146,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   HomeRoute: HomeRoute,
   PracticeRoute: PracticeRoute,
+  ProgressRoute: ProgressRoute,
   TargetBankRoute: TargetBankRoute,
 }
 export const routeTree = rootRouteImport
