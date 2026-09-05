@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Download, Flame } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, BookOpenCheck, Download, Flame, Target, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { FlagChip } from "@/components/FlagChip";
 import { TrendChart } from "@/components/TrendChart";
-import { FLAG_LOG, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
+import { FLAG_LOG, PATIENT_MISTAKES, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
 import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/progress")({
