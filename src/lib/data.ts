@@ -158,5 +158,5 @@ export const FLAG_LOG = [
 export const PATIENT_TREND = [62, 65, 63, 68, 71, 74, 76, 78];
 
 export function presetById(id: string): TherapyPreset {
-  return PRESETS.find((p) => p.id === id) ?? PRESETS[0];
+  return PRESETS.find((p) => p.id === id) ?? PRESETS[0]!;
 }

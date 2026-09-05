@@ -66,7 +66,7 @@ function PracticeStudio() {
 
   const openDrill = (word: string) => {
     const key = word.toLowerCase().replace(/[^a-z]/g, "");
-    const sentences = DRILL_SENTENCES[key] ?? Object.values(DRILL_SENTENCES)[0];
+    const sentences = DRILL_SENTENCES[key] ?? Object.values(DRILL_SENTENCES)[0]!;
     setLoopIndex(0);
     setDrill({ word: word.replace(/[^a-zA-Z]/g, ""), sentences });
   };

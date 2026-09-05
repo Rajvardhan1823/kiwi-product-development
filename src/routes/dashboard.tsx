@@ -21,8 +21,8 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
-  const [selectedId, setSelectedId] = useState(PATIENTS[0].id);
-  const patient = PATIENTS.find((p) => p.id === selectedId) ?? PATIENTS[0];
+  const [selectedId, setSelectedId] = useState(PATIENTS[0]!.id);
+  const patient = PATIENTS.find((p) => p.id === selectedId) ?? PATIENTS[0]!;
   const preset = presetById(patient.preset);
   const log = FLAG_LOG.filter((r) => r.patient === patient.name);
 
