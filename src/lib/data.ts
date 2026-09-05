@@ -157,6 +157,13 @@ export const FLAG_LOG = [
 
 export const PATIENT_TREND = [62, 65, 63, 68, 71, 74, 76, 78];
 
+export const PATIENT_MISTAKES = [
+  { word: "around", label: "dropped sound", tip: "The /r/ at the start went missing — try holding it a beat longer." },
+  { word: "through", label: "altered sound", tip: "The “th” came out closer to an “f” — tongue between the teeth." },
+  { word: "listened", label: "dropped sound", tip: "The ending was swallowed — land on the final “d”." },
+  { word: "street", label: "altered sound", tip: "The “str” cluster simplified — slow into the first syllable." },
+];
+
 export function presetById(id: string): TherapyPreset {
   return PRESETS.find((p) => p.id === id) ?? PRESETS[0]!;
 }

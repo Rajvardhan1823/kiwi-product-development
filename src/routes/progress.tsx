@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Download, Flame } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, BookOpenCheck, Download, Flame, Target, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { FlagChip } from "@/components/FlagChip";
 import { TrendChart } from "@/components/TrendChart";
-import { FLAG_LOG, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
+import { FLAG_LOG, PATIENT_MISTAKES, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
 import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/progress")({
@@ -43,26 +43,141 @@ function Progress() {
       </div>
 
       {view === "patient" ? (
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.4fr]">
-          <div className="rounded-2xl border border-border bg-card p-8">
-            <div className="inline-flex items-center gap-2 text-sage-foreground">
-              <Flame className="h-6 w-6" aria-hidden="true" />
-              <span className="text-lg font-medium">Practice streak</span>
+        <div className="mt-8 space-y-6">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <div className="inline-flex items-center gap-2 text-sage-foreground">
+                <Flame className="h-6 w-6" aria-hidden="true" />
+                <span className="text-lg font-medium">Practice streak</span>
+              </div>
+              <p className="mt-3 font-metrics text-6xl font-semibold">{streak}</p>
+              <p className="mt-1 text-muted-foreground">days in a row</p>
+              <p className="mt-5 text-[0.95rem] leading-relaxed text-muted-foreground">
+                No badges, no levels — just the fact that you showed up.
+              </p>
             </div>
-            <p className="mt-3 font-metrics text-6xl font-semibold">{streak}</p>
-            <p className="mt-1 text-muted-foreground">days in a row with a completed session</p>
-            <p className="mt-6 text-[0.95rem] leading-relaxed text-muted-foreground">
-              That's the only score here. No badges, no levels — just the fact that you showed up.
-            </p>
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <div className="inline-flex items-center gap-2 text-secondary">
+                <Target className="h-6 w-6" aria-hidden="true" />
+                <span className="text-lg font-medium">Latest clarity</span>
+              </div>
+              <p className="mt-3 font-metrics text-6xl font-semibold">
+                {PATIENT_TREND[PATIENT_TREND.length - 1]}%
+              </p>
+              <p className="mt-1 text-muted-foreground">of words spoken clearly, last session</p>
+              <p className="mt-5 inline-flex items-center gap-2 text-[0.95rem] font-medium text-sage-foreground">
+                <TrendingUp className="h-5 w-5" aria-hidden="true" />
+                Up {PATIENT_TREND[PATIENT_TREND.length - 1]! - PATIENT_TREND[0]!} points since you started
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <div className="inline-flex items-center gap-2 text-secondary">
+                <BookOpenCheck className="h-6 w-6" aria-hidden="true" />
+                <span className="text-lg font-medium">Sessions done</span>
+              </div>
+              <p className="mt-3 font-metrics text-6xl font-semibold">{PATIENT_TREND.length}</p>
+              <p className="mt-1 text-muted-foreground">completed readings so far</p>
+              <p className="mt-5 text-[0.95rem] leading-relaxed text-muted-foreground">
+                Your clinician sees the same numbers you do.
+              </p>
+            </div>
           </div>
+
           <div className="rounded-2xl border border-border bg-card p-8">
-            <h2 className="text-xl font-medium">Clarity trend</h2>
+            <h2 className="text-xl font-medium">How your clarity is moving</h2>
             <p className="mt-1 text-[0.95rem] text-muted-foreground">
               Your last eight sessions. Slow and upward is exactly right.
             </p>
             <div className="mt-5">
               <TrendChart data={PATIENT_TREND} label="Clarity across your last eight sessions" />
             </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <h2 className="text-xl font-medium">Words Kiwi noticed in your last reading</h2>
+              <p className="mt-1 text-[0.95rem] text-muted-foreground">
+                These aren't failures — they're the exact spots where practice pays off.
+              </p>
+              <ul className="mt-5 space-y-3">
+                {PATIENT_MISTAKES.map((m) => (
+                  <li
+                    key={m.word}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/70 bg-background px-4 py-3"
+                  >
+                    <div>
+                      <p className="text-lg font-medium">“{m.word}”</p>
+                      <p className="text-[0.9rem] text-muted-foreground">{m.tip}</p>
+                    </div>
+                    <FlagChip label={m.label} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <h2 className="text-xl font-medium">Words to practise next</h2>
+              <p className="mt-1 text-[0.95rem] text-muted-foreground">
+                The sounds your clinician is watching, with how often they've come up.
+              </p>
+              <ul className="mt-5 space-y-3">
+                {TARGET_BANK.map((t) => (
+                  <li key={t.id} className="rounded-xl border border-border/70 bg-background px-4 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-lg font-medium">“{t.word}”</p>
+                      <span className="font-metrics text-[0.9rem] text-muted-foreground">
+                        {t.flagged}× flagged
+                      </span>
+                    </div>
+                    <p className="mt-1 text-[0.9rem] text-muted-foreground">
+                      {t.sound} — {t.note.toLowerCase()}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/practice"
+                className="kiwi-transition mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-5 py-2.5 font-medium text-primary-foreground hover:opacity-90"
+              >
+                Practise these now
+                <ArrowRight className="h-5 w-5" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-8">
+            <h2 className="text-xl font-medium">Your recent sessions</h2>
+            <p className="mt-1 text-[0.95rem] text-muted-foreground">
+              What you read, what came up, and how clearly it came out.
+            </p>
+            <div className="mt-5 overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                <caption className="sr-only">Your recent practice sessions</caption>
+                <thead>
+                  <tr className="border-b border-border text-[0.9rem] text-muted-foreground">
+                    <th scope="col" className="py-3 pr-4 font-medium">Date</th>
+                    <th scope="col" className="py-3 pr-4 font-medium">Reading</th>
+                    <th scope="col" className="py-3 pr-4 font-medium">Kiwi noticed</th>
+                    <th scope="col" className="py-3 font-medium">Clarity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {FLAG_LOG.filter((r) => r.patient === "Anand K.").map((row, i) => (
+                    <tr key={i} className="border-b border-border/70">
+                      <td className="py-4 pr-4 font-metrics">{row.date}</td>
+                      <td className="py-4 pr-4">{row.session}</td>
+                      <td className="py-4 pr-4">
+                        <FlagChip label={row.top} />
+                      </td>
+                      <td className="py-4 font-metrics font-semibold text-secondary">{row.accuracy}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-6 text-[0.9rem] text-muted-foreground">
+              Kiwi shows you patterns honestly. It never smooths over a slip — and it never scolds you
+              for one either.
+            </p>
           </div>
         </div>
       ) : (
