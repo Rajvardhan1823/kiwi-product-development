@@ -47,6 +47,7 @@ function PracticeStudio() {
   const [micError, setMicError] = useState<string | null>(null);
   const [liveWords, setLiveWords] = useState<string[]>([]);
   const [usedMic, setUsedMic] = useState(false);
+  const [liveWordsOn, setLiveWordsOn] = useState(false);
   const micRef = useRef<{ stop: () => void } | null>(null);
   const dictRef = useRef<{ stop: () => void } | null>(null);
 
@@ -71,14 +72,14 @@ function PracticeStudio() {
 
   // Live transcript from the microphone, compared with the reference reading.
   const liveTranscript = useMemo(
-    () => (usedMic ? compareToReference(ASSIGNED_READING.text, liveWords) : []),
-    [usedMic, liveWords],
+    () => (liveWordsOn ? compareToReference(ASSIGNED_READING.text, liveWords) : []),
+    [liveWordsOn, liveWords],
   );
 
   // Simulated transcript (used only when the browser can't do live dictation).
   const [visibleCount, setVisibleCount] = useState(0);
   useEffect(() => {
-    if (phase !== "recording" || usedMic) return;
+    if (phase !== "recording" || liveWordsOn) return;
     if (visibleCount >= MOCK_TRANSCRIPT.length) {
       const t = setTimeout(() => {
         setPhase("done");
@@ -91,7 +92,7 @@ function PracticeStudio() {
     }
     const t = setTimeout(() => setVisibleCount((c) => c + 1), 650);
     return () => clearTimeout(t);
-  }, [phase, visibleCount, completeSession, usedMic]);
+  }, [phase, visibleCount, completeSession, liveWordsOn]);
 
   const startRecording = async () => {
     stopSpeaking();
@@ -105,11 +106,12 @@ function PracticeStudio() {
     try {
       micRef.current = await startMicLevel(setLevel);
       setUsedMic(true);
-      if (dictationSupported()) {
-        dictRef.current = startDictation((words) => setLiveWords(words));
-      }
+      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words)) : null;
+      dictRef.current = dict;
+      setLiveWordsOn(Boolean(dict));
     } catch {
       setUsedMic(false);
+      setLiveWordsOn(false);
       setMicError("Kiwi couldn't reach your microphone, so this run is a simulated demo.");
     }
     setPhase("recording");
@@ -124,7 +126,7 @@ function PracticeStudio() {
     }
   };
 
-  const shownTranscript = usedMic ? liveTranscript : MOCK_TRANSCRIPT.slice(0, visibleCount);
+  const shownTranscript = liveWordsOn ? liveTranscript : MOCK_TRANSCRIPT.slice(0, visibleCount);
 
   const flaggedWords = useMemo(() => shownTranscript.filter((w) => w.flag), [shownTranscript]);
 
