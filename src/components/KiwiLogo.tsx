@@ -1,4 +1,4 @@
-import wordmark from "@/assets/kiwi-wordmark.png.asset.json";
+import wordmark from "@/assets/kivi-wordmark.png";
 import bird from "@/assets/kiwi-bird.png.asset.json";
 
 export function KiviWordmark({ className = "h-9" }: { className?: string }) {
@@ -7,7 +7,7 @@ export function KiviWordmark({ className = "h-9" }: { className?: string }) {
       className="inline-flex items-center rounded-lg bg-[#0d0d0d] px-3 py-1.5"
       aria-label="Kivi by Sarvam"
     >
-      <img src={wordmark.url} alt="Kivi by Sarvam" className={className} />
+      <img src={wordmark} alt="Kivi by Sarvam" className={className} />
     </span>
   );
 }
