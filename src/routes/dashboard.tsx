@@ -9,9 +9,9 @@ import { FLAG_LOG, PATIENTS, presetById } from "@/lib/data";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Analysis Dashboard — Kiwi for Clinicians" },
+      { title: "Analysis Dashboard | Kiwi for Clinicians" },
       { name: "description", content: "Patient list, per-patient accuracy trends, and a session-by-session flag log for speech-language pathologists." },
-      { property: "og:title", content: "Analysis Dashboard — Kiwi for Clinicians" },
+      { property: "og:title", content: "Analysis Dashboard | Kiwi for Clinicians" },
       { property: "og:description", content: "Objective session data across your caseload, instead of patient self-report." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -31,7 +31,7 @@ function Dashboard() {
       <div>
         <h1 className="text-3xl font-medium tracking-tight">Analysis Dashboard</h1>
         <p className="mt-1 text-muted-foreground">
-          Objective session data across your caseload — not what a patient remembers to mention.
+          Objective session data across your caseload, not what a patient remembers to mention.
         </p>
       </div>
 

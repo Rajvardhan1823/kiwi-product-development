@@ -18,7 +18,7 @@ const CLINICIAN_NAV = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { location } = useRouterState();
-  const { role, setRole } = useSession();
+  const { role, setRole, profile } = useSession();
   const navigate = useNavigate();
   const clinician = role === "clinician";
   const nav = clinician ? CLINICIAN_NAV : PATIENT_NAV;
@@ -30,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className={`min-h-screen text-foreground ${clinician ? "bg-muted" : "bg-background"}`}>
-      {/* Mode band — makes it obvious whose screen this is, with no login needed */}
+      {/* Mode band, makes it obvious whose screen this is, with no login needed */}
       <div
         className={`w-full ${clinician ? "bg-foreground text-background" : "bg-secondary text-secondary-foreground"}`}
       >
@@ -41,7 +41,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             ) : (
               <UserRound className="h-4.5 w-4.5" aria-hidden="true" />
             )}
-            {clinician ? "Clinician workspace — Dr. Meera Rao, SLP" : "Practice space — Anand K."}
+            {clinician
+              ? "Clinician workspace, Dr. Meera Rao, SLP"
+              : `Practice space for ${profile.name || "you"}${profile.age ? `, age ${profile.age}` : ""}`}
+
           </p>
           <div className="inline-flex items-center gap-2 text-[0.85rem]">
             <span className="opacity-80">Demo: switch view</span>

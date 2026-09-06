@@ -7,9 +7,9 @@ import { TARGET_BANK } from "@/lib/data";
 export const Route = createFileRoute("/target-bank")({
   head: () => ({
     meta: [
-      { title: "Target Bank — Kiwi" },
+      { title: "Target Bank | Kiwi" },
       { name: "description", content: "The specific sounds and words this patient is working on, with replay audio for each." },
-      { property: "og:title", content: "Target Bank — Kiwi" },
+      { property: "og:title", content: "Target Bank | Kiwi" },
       { property: "og:description", content: "The specific sounds and words this patient is working on." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,7 +41,7 @@ function TargetBank() {
       {
         id: Date.now(),
         word: word.trim(),
-        sound: sound.trim() || "—",
+        sound: sound.trim() || ",",
         note: note.trim() || "Added by clinician",
         addedBy: "Dr. Rao",
         flagged: 0,
@@ -58,7 +58,7 @@ function TargetBank() {
         <div>
           <h1 className="text-3xl font-medium tracking-tight">Target Bank</h1>
           <p className="mt-1 text-muted-foreground">
-            The specific sounds and words you're working on — not a general dictionary.
+            The specific sounds and words you're working on, not a general dictionary.
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2 text-[0.9rem] text-muted-foreground">
@@ -95,7 +95,7 @@ function TargetBank() {
 
       <section aria-labelledby="clinician-add" className="mt-10 rounded-2xl border border-dashed border-primary/40 bg-card p-8">
         <h2 id="clinician-add" className="text-xl font-medium">
-          Clinician — add a target
+          Clinician, add a target
         </h2>
         <p className="mt-1 text-[0.95rem] text-muted-foreground">
           New entries appear in the patient's bank with reference audio attached.

@@ -1,7 +1,7 @@
 interface Props {
   /** Bars animate outward while the patient speaks. */
   active?: boolean;
-  /** Live microphone loudness, 0–1. When given, bars follow the real voice. */
+  /** Live microphone loudness, 0,1. When given, bars follow the real voice. */
   level?: number | undefined;
   /** Index of the bar that carries the example flag marker. */
   flagAt?: number;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 /**
- * Waveform Bloom — the product mark. A soft waveform that blooms outward as
+ * Waveform Bloom, the product mark. A soft waveform that blooms outward as
  * the patient speaks. Replaces the cartoon mascot entirely.
  */
 export function WaveformBloom({ active = false, level, flagAt, height = 56, bars = 28, className = "" }: Props) {

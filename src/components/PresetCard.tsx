@@ -11,7 +11,7 @@ interface Props {
 }
 
 /**
- * A Preset is a large card with a one-line consequence — never a dropdown row.
+ * A Preset is a large card with a one-line consequence, never a dropdown row.
  * Each card shows a mocked 3-second waveform with one example flag so the
  * patient hears the consequence of the choice before committing to it.
  */

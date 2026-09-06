@@ -5,7 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { FlagChip, FlagIcon } from "@/components/FlagChip";
 import { PresetCard } from "@/components/PresetCard";
 import { WaveformBloom } from "@/components/WaveformBloom";
-import { ASSIGNED_READING, DRILL_SENTENCES, MOCK_TRANSCRIPT, PRESETS, presetById } from "@/lib/data";
+import { ASSIGNED_READING, DRILL_SENTENCES, LANGUAGES, MOCK_TRANSCRIPT, PRESETS, languageByCode, presetById } from "@/lib/data";
 import { useSession } from "@/lib/session";
 import {
   compareToReference,
@@ -20,9 +20,9 @@ import {
 export const Route = createFileRoute("/practice")({
   head: () => ({
     meta: [
-      { title: "Practice Studio — Kiwi" },
-      { name: "description", content: "Record against your reference reading. Kiwi flags dropped or altered sounds as you speak — honestly, never judgementally." },
-      { property: "og:title", content: "Practice Studio — Kiwi" },
+      { title: "Practice Studio | Kiwi" },
+      { name: "description", content: "Record against your reference reading. Kiwi flags dropped or altered sounds as you speak, honestly, never judgementally." },
+      { property: "og:title", content: "Practice Studio | Kiwi" },
       { property: "og:description", content: "Record against your reference reading with honest, near-live feedback." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -34,8 +34,9 @@ export const Route = createFileRoute("/practice")({
 type Phase = "idle" | "recording" | "done";
 
 function PracticeStudio() {
-  const { presetId, setPresetId, completeSession } = useSession();
+  const { presetId, setPresetId, completeSession, profile, setProfile } = useSession();
   const preset = presetById(presetId);
+  const language = languageByCode(profile.language);
   const [phase, setPhase] = useState<Phase>("idle");
   const [presetOpen, setPresetOpen] = useState(false);
   const [flaggedPassage, setFlaggedPassage] = useState(false);
@@ -67,13 +68,13 @@ function PracticeStudio() {
   const play = (text: string) => {
     if (!speechSupported()) return;
     setSpeaking(true);
-    void speak(text, { onEnd: () => setSpeaking(false) });
+    void speak(text, { lang: profile.language, onEnd: () => setSpeaking(false) });
   };
 
   // Live transcript from the microphone, compared with the reference reading.
   const liveTranscript = useMemo(
-    () => (liveWordsOn ? compareToReference(ASSIGNED_READING.text, liveWords) : []),
-    [liveWordsOn, liveWords],
+    () => (liveWordsOn ? compareToReference(language.text, liveWords) : []),
+    [liveWordsOn, liveWords, language.text],
   );
 
   // Simulated transcript (used only when the browser can't do live dictation).
@@ -106,7 +107,7 @@ function PracticeStudio() {
     try {
       micRef.current = await startMicLevel(setLevel);
       setUsedMic(true);
-      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words)) : null;
+      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words), profile.language) : null;
       dictRef.current = dict;
       setLiveWordsOn(Boolean(dict));
     } catch {
@@ -139,7 +140,7 @@ function PracticeStudio() {
 
   return (
     <AppShell>
-      {/* Persistent preset pill — never re-asked, always explained, one tap to change */}
+      {/* Persistent preset pill, never re-asked, always explained, one tap to change */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-3">
         <div className="flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-[0.95rem] font-medium text-primary-foreground">
@@ -147,32 +148,49 @@ function PracticeStudio() {
           </span>
           <span className="text-[0.9rem] text-muted-foreground">{preset.consequence}</span>
         </div>
-        <button
-          type="button"
-          onClick={() => setPresetOpen(true)}
-          className="kiwi-transition inline-flex min-h-11 items-center rounded-lg border border-input bg-card px-4 py-2 text-[0.95rem] font-medium hover:bg-accent"
-        >
-          Change focus
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="inline-flex items-center gap-2 text-[0.9rem]">
+            <span className="text-muted-foreground">Language</span>
+            <select
+              value={profile.language}
+              onChange={(e) => setProfile({ language: e.target.value })}
+              className="min-h-11 rounded-lg border border-input bg-card px-3 py-2 text-[0.95rem] font-medium"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={() => setPresetOpen(true)}
+            className="kiwi-transition inline-flex min-h-11 items-center rounded-lg border border-input bg-card px-4 py-2 text-[0.95rem] font-medium hover:bg-accent"
+          >
+            Change focus
+          </button>
+        </div>
+
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <section aria-labelledby="reference-heading" className="rounded-2xl border border-border bg-card p-8">
           <div className="flex items-center justify-between gap-3">
             <h1 id="reference-heading" className="text-2xl font-medium tracking-tight">
-              {ASSIGNED_READING.title}
+              {language.title}
             </h1>
             <button
               type="button"
               aria-label="Play reference audio"
-              onClick={() => (speaking ? (stopSpeaking(), setSpeaking(false)) : play(ASSIGNED_READING.text))}
+              onClick={() => (speaking ? (stopSpeaking(), setSpeaking(false)) : play(language.text))}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg bg-secondary px-4 py-2 font-medium text-secondary-foreground hover:opacity-90"
             >
               {speaking ? <Square className="h-5 w-5" aria-hidden="true" /> : <Play className="h-5 w-5" aria-hidden="true" />}
               {speaking ? "Stop audio" : "Listen first"}
             </button>
           </div>
-          <p className="mt-5 text-2xl leading-relaxed">{ASSIGNED_READING.text}</p>
+          <p className="mt-5 text-2xl leading-relaxed">{language.text}</p>
           <p className="mt-4 text-[0.9rem] text-muted-foreground">
             No timer, no countdown. Start whenever you're ready, stop whenever you like.
           </p>
@@ -187,7 +205,7 @@ function PracticeStudio() {
           </h2>
           <div className="mt-4 flex-1 rounded-xl bg-muted px-4 py-6">
             <WaveformBloom
-              active={phase === "recording" || speaking}
+              active={phase === "recording"}
               level={phase === "recording" && usedMic ? level : undefined}
               height={64}
               bars={32}
@@ -238,7 +256,7 @@ function PracticeStudio() {
         {phase === "idle" ? (
           <p className="mt-4 text-muted-foreground">
             Your transcript appears here as you speak. Flagged words are marked with an icon, an
-            amber underline, and a plain-language label — never just a colour.
+            amber underline, and a plain-language label, never just a colour.
           </p>
         ) : (
           <>
@@ -249,7 +267,7 @@ function PracticeStudio() {
                     key={i}
                     type="button"
                     onClick={() => openDrill(w.word)}
-                    title={`${w.flag} — tap to practise this word`}
+                    title={`${w.flag}, tap to practise this word`}
                     className="kiwi-transition rounded-md border-b-[3px] border-flag-foreground bg-flag px-1.5 font-medium text-flag-foreground hover:brightness-95"
                   >
                     <span className="inline-flex items-center gap-1.5">
@@ -273,7 +291,7 @@ function PracticeStudio() {
                     onClick={() => openDrill(w.word)}
                     className="kiwi-transition rounded-full hover:brightness-95"
                   >
-                    <FlagChip label={`${w.word.replace(/[^a-zA-Z,.'’]/g, "")} — ${w.flag}`} />
+                    <FlagChip label={`${w.word.replace(/[^a-zA-Z,.'’]/g, "")}, ${w.flag}`} />
                   </button>
                 ))}
               </div>
@@ -287,7 +305,7 @@ function PracticeStudio() {
           <div className="mt-3 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => play(ASSIGNED_READING.text)}
+              onClick={() => play(language.text)}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg border border-input bg-card px-4 py-2.5 font-medium hover:bg-accent"
             >
               <Play className="h-4.5 w-4.5" aria-hidden="true" /> Replay reference audio
@@ -329,7 +347,7 @@ function PracticeStudio() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 id="drill-heading" className="text-2xl font-medium tracking-tight">
-                  Repetition loop — “{drill.word}”
+                  Repetition loop in “{drill.word}”
                 </h2>
                 <p className="mt-1 text-muted-foreground">
                   Kiwi built these practice sentences around the sound you flagged. Go slowly.
@@ -365,7 +383,7 @@ function PracticeStudio() {
               ))}
             </ol>
             <div className="mt-6 flex items-center justify-between">
-              <WaveformBloom active={speaking} height={36} bars={20} />
+              <WaveformBloom height={36} bars={20} />
               <button
                 type="button"
                 onClick={() => setDrill(null)}
@@ -393,7 +411,7 @@ function PracticeStudio() {
                   What should Kiwi listen for?
                 </h2>
                 <p className="mt-1 text-muted-foreground">
-                  You can change this any time — it's your practice.
+                  You can change this any time, it's your practice.
                 </p>
               </div>
               <button

@@ -3,7 +3,7 @@
  * - speak(): reference audio via the built-in speech synthesiser.
  * - useMicLevel(): live microphone loudness for the waveform bloom.
  * - useDictation(): live word-by-word recognition where the browser supports it.
- * Everything stays on the device — nothing is uploaded.
+ * Everything stays on the device, nothing is uploaded.
  */
 
 export function voicesReady(): Promise<void> {
@@ -26,25 +26,29 @@ export function speechSupported() {
   return typeof window !== "undefined" && "speechSynthesis" in window;
 }
 
-export async function speak(text: string, opts: { rate?: number; onEnd?: () => void } = {}) {
+export async function speak(text: string, opts: { rate?: number; lang?: string; onEnd?: () => void } = {}) {
   if (!speechSupported()) {
     opts.onEnd?.();
     return;
   }
   await voicesReady();
   speechSynthesis.cancel();
+  const lang = opts.lang ?? "en-US";
   const u = new SpeechSynthesisUtterance(text);
   u.rate = opts.rate ?? 0.88;
   u.pitch = 1;
-  u.lang = "en-US";
-  const preferred = speechSynthesis
-    .getVoices()
-    .find((v) => /en-(US|GB|IN)/i.test(v.lang) && /female|samantha|google|zira|aria/i.test(v.name));
+  u.lang = lang;
+  const voices = speechSynthesis.getVoices();
+  const exact = voices.find((v) => v.lang.replace("_", "-").toLowerCase() === lang.toLowerCase());
+  const base = lang.split("-")[0]!.toLowerCase();
+  const sameLanguage = voices.find((v) => v.lang.toLowerCase().startsWith(base));
+  const preferred = exact ?? sameLanguage;
   if (preferred) u.voice = preferred;
   u.onend = () => opts.onEnd?.();
   u.onerror = () => opts.onEnd?.();
   speechSynthesis.speak(u);
 }
+
 
 export function stopSpeaking() {
   if (speechSupported()) speechSynthesis.cancel();
@@ -105,14 +109,14 @@ export function dictationSupported() {
   return Boolean(w.SpeechRecognition || w.webkitSpeechRecognition);
 }
 
-export function startDictation(onWords: (words: string[], final: boolean) => void): { stop: () => void } | null {
+export function startDictation(onWords: (words: string[], final: boolean) => void, lang = "en-US"): { stop: () => void } | null {
   if (!dictationSupported()) return null;
   const w = window as unknown as { SpeechRecognition?: new () => SR; webkitSpeechRecognition?: new () => SR };
   const Ctor = w.SpeechRecognition ?? w.webkitSpeechRecognition!;
   const rec = new Ctor();
   rec.continuous = true;
   rec.interimResults = true;
-  rec.lang = "en-US";
+  rec.lang = lang;
   let finalText = "";
   rec.onresult = (e) => {
     let interim = "";

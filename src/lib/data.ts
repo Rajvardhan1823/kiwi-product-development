@@ -1,4 +1,4 @@
-// Mocked data for the Kiwi prototype — everything is local and on-device in spirit.
+// Mocked data for the Kiwi prototype, everything is local and on-device in spirit.
 
 export interface TherapyPreset {
   id: string;
@@ -23,7 +23,7 @@ export const PRESETS: TherapyPreset[] = [
     consequence: "Kiwi will focus on speed and rhythm, not pronunciation.",
     detail:
       "Best for rebuilding a steady, even pace. Kiwi listens for rushed or stretched stretches of speech.",
-    exampleFlag: "rushed phrase — “wenttothe”",
+    exampleFlag: "rushed phrase in “wenttothe”",
   },
   {
     id: "fluency",
@@ -147,23 +147,127 @@ export const PATIENTS = [
 ];
 
 export const FLAG_LOG = [
-  { date: "Sep 5", session: "The Morning Walk", patient: "Anand K.", flags: 3, top: "dropped /r/ — “around”", accuracy: 78 },
-  { date: "Sep 4", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "final /d/ — “listened”", accuracy: 76 },
+  { date: "Sep 5", session: "The Morning Walk", patient: "Anand K.", flags: 3, top: "dropped /r/ in “around”", accuracy: 78 },
+  { date: "Sep 4", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "final /d/ in “listened”", accuracy: 76 },
   { date: "Sep 4", session: "At the Market", patient: "Priya S.", flags: 5, top: "rushed middle syllables", accuracy: 69 },
-  { date: "Sep 3", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "dropped /r/ — “around”", accuracy: 74 },
-  { date: "Sep 3", session: "Phone Call Practice", patient: "Joseph M.", flags: 1, top: "long pause — “yesterday”", accuracy: 82 },
-  { date: "Sep 2", session: "The Morning Walk", patient: "Anand K.", flags: 6, top: "/θr/ cluster — “through”", accuracy: 71 },
+  { date: "Sep 3", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "dropped /r/ in “around”", accuracy: 74 },
+  { date: "Sep 3", session: "Phone Call Practice", patient: "Joseph M.", flags: 1, top: "long pause in “yesterday”", accuracy: 82 },
+  { date: "Sep 2", session: "The Morning Walk", patient: "Anand K.", flags: 6, top: "/θr/ cluster in “through”", accuracy: 71 },
 ];
 
 export const PATIENT_TREND = [62, 65, 63, 68, 71, 74, 76, 78];
 
 export const PATIENT_MISTAKES = [
-  { word: "around", label: "dropped sound", tip: "The /r/ at the start went missing — try holding it a beat longer." },
-  { word: "through", label: "altered sound", tip: "The “th” came out closer to an “f” — tongue between the teeth." },
-  { word: "listened", label: "dropped sound", tip: "The ending was swallowed — land on the final “d”." },
-  { word: "street", label: "altered sound", tip: "The “str” cluster simplified — slow into the first syllable." },
+  { word: "around", label: "dropped sound", tip: "The /r/ at the start went missing, try holding it a beat longer." },
+  { word: "through", label: "altered sound", tip: "The “th” came out closer to an “f”, tongue between the teeth." },
+  { word: "listened", label: "dropped sound", tip: "The ending was swallowed, land on the final “d”." },
+  { word: "street", label: "altered sound", tip: "The “str” cluster simplified, slow into the first syllable." },
 ];
 
 export function presetById(id: string): TherapyPreset {
   return PRESETS.find((p) => p.id === id) ?? PRESETS[0]!;
 }
+
+/* ---------- languages (patient side) ---------- */
+
+export interface PracticeLanguage {
+  code: string;
+  label: string;
+  native: string;
+  title: string;
+  text: string;
+}
+
+export const LANGUAGES: PracticeLanguage[] = [
+  {
+    code: "en-US",
+    label: "English (US)",
+    native: "English",
+    title: ASSIGNED_READING.title,
+    text: ASSIGNED_READING.text,
+  },
+  {
+    code: "en-IN",
+    label: "English (India)",
+    native: "English",
+    title: ASSIGNED_READING.title,
+    text: ASSIGNED_READING.text,
+  },
+  {
+    code: "hi-IN",
+    label: "Hindi",
+    native: "हिन्दी",
+    title: "सुबह की सैर",
+    text: "सात बजे मैं बगीचे में टहलने गया और पक्षियों की आवाज़ सुनी। हवा ठंडी थी और सड़क शांत थी।",
+  },
+  {
+    code: "es-ES",
+    label: "Spanish",
+    native: "Español",
+    title: "El paseo de la mañana",
+    text: "A las siete caminé por el jardín y escuché a los pájaros. El aire estaba fresco y la calle estaba tranquila.",
+  },
+  {
+    code: "fr-FR",
+    label: "French",
+    native: "Français",
+    title: "La promenade du matin",
+    text: "Vers sept heures, j'ai traversé le jardin et j'ai écouté les oiseaux. L'air était frais et la rue était calme.",
+  },
+];
+
+export function languageByCode(code: string): PracticeLanguage {
+  return LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0]!;
+}
+
+/* ---------- per-error recovery (patient dashboard) ---------- */
+
+export interface ErrorRecovery {
+  word: string;
+  sound: string;
+  label: string;
+  tip: string;
+  /** Times this slipped in each of the last six sessions, oldest first. */
+  history: number[];
+  practised: number;
+  goal: number;
+}
+
+export const ERROR_RECOVERY: ErrorRecovery[] = [
+  {
+    word: "around",
+    sound: "/r/ at the start",
+    label: "dropped sound",
+    tip: "Hold the /r/ a beat longer before the rest of the word.",
+    history: [5, 5, 4, 3, 3, 1],
+    practised: 18,
+    goal: 24,
+  },
+  {
+    word: "through",
+    sound: "“th” blend",
+    label: "altered sound",
+    tip: "Tongue lightly between the teeth, then let the air out.",
+    history: [4, 4, 4, 3, 2, 2],
+    practised: 12,
+    goal: 24,
+  },
+  {
+    word: "listened",
+    sound: "final “d”",
+    label: "dropped sound",
+    tip: "Land firmly on the ending instead of trailing off.",
+    history: [6, 5, 5, 4, 4, 3],
+    practised: 9,
+    goal: 24,
+  },
+  {
+    word: "street",
+    sound: "“str” blend",
+    label: "altered sound",
+    tip: "Slow into the first syllable so all three sounds get their turn.",
+    history: [3, 3, 2, 2, 1, 1],
+    practised: 21,
+    goal: 24,
+  },
+];
