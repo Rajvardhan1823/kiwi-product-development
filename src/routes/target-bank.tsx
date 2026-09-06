@@ -7,9 +7,9 @@ import { TARGET_BANK } from "@/lib/data";
 export const Route = createFileRoute("/target-bank")({
   head: () => ({
     meta: [
-      { title: "Target Bank | Kiwi" },
+      { title: "Target Bank | Kivi" },
       { name: "description", content: "The specific sounds and words this patient is working on, with replay audio for each." },
-      { property: "og:title", content: "Target Bank | Kiwi" },
+      { property: "og:title", content: "Target Bank | Kivi" },
       { property: "og:description", content: "The specific sounds and words this patient is working on." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

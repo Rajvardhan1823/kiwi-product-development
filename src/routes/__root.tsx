@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kiwi, Speech Rehabilitation Companion" },
+      { title: "Kivi, Speech Rehabilitation Companion" },
       {
         name: "description",
         content:
-          "Kiwi is an on-device speech rehabilitation companion for patients and speech-language pathologists, honest, non-judgemental practice between clinical sessions.",
+          "Kivi is an on-device speech rehabilitation companion for patients and speech-language pathologists, honest, non-judgemental practice between clinical sessions.",
       },
       { name: "author", content: "Sarvam" },
-      { property: "og:title", content: "Kiwi, Speech Rehabilitation Companion" },
+      { property: "og:title", content: "Kivi, Speech Rehabilitation Companion" },
       {
         property: "og:description",
         content:

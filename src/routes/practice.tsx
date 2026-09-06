@@ -20,9 +20,9 @@ import {
 export const Route = createFileRoute("/practice")({
   head: () => ({
     meta: [
-      { title: "Practice Studio | Kiwi" },
-      { name: "description", content: "Record against your reference reading. Kiwi flags dropped or altered sounds as you speak, honestly, never judgementally." },
-      { property: "og:title", content: "Practice Studio | Kiwi" },
+      { title: "Practice Studio | Kivi" },
+      { name: "description", content: "Record against your reference reading. Kivi flags dropped or altered sounds as you speak, honestly, never judgementally." },
+      { property: "og:title", content: "Practice Studio | Kivi" },
       { property: "og:description", content: "Record against your reference reading with honest, near-live feedback." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -113,7 +113,7 @@ function PracticeStudio() {
     } catch {
       setUsedMic(false);
       setLiveWordsOn(false);
-      setMicError("Kiwi couldn't reach your microphone, so this run is a simulated demo.");
+      setMicError("Kivi couldn't reach your microphone, so this run is a simulated demo.");
     }
     setPhase("recording");
   };
@@ -244,7 +244,7 @@ function PracticeStudio() {
       <section aria-labelledby="transcript-heading" className="mt-8 rounded-2xl border border-border bg-card p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="transcript-heading" className="text-xl font-medium">
-            What Kiwi heard
+            What Kivi heard
           </h2>
           {phase !== "idle" && (
             <span className="font-metrics text-[0.9rem] text-muted-foreground" aria-live="polite">
@@ -350,7 +350,7 @@ function PracticeStudio() {
                   Repetition loop in “{drill.word}”
                 </h2>
                 <p className="mt-1 text-muted-foreground">
-                  Kiwi built these practice sentences around the sound you flagged. Go slowly.
+                  Kivi built these practice sentences around the sound you flagged. Go slowly.
                 </p>
               </div>
               <button
@@ -408,7 +408,7 @@ function PracticeStudio() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 id="preset-dialog-heading" className="text-2xl font-medium tracking-tight">
-                  What should Kiwi listen for?
+                  What should Kivi listen for?
                 </h2>
                 <p className="mt-1 text-muted-foreground">
                   You can change this any time, it's your practice.

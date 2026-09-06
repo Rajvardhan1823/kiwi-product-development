@@ -7,9 +7,9 @@ import { useSession } from "@/lib/session";
 export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
-      { title: "Your practice today | Kiwi" },
+      { title: "Your practice today | Kivi" },
       { name: "description", content: "Your reading for today, your streak, and one tap into practice." },
-      { property: "og:title", content: "Your practice today | Kiwi" },
+      { property: "og:title", content: "Your practice today | Kivi" },
       { property: "og:description", content: "Your reading for today, your streak, and one tap into practice." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -88,7 +88,7 @@ function Home() {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-6">
-            <h2 className="text-lg font-medium">What Kiwi is listening for</h2>
+            <h2 className="text-lg font-medium">What Kivi is listening for</h2>
             <p className="mt-2 text-[0.95rem] text-muted-foreground">{preset.consequence}</p>
           </div>
 
@@ -110,7 +110,7 @@ function Home() {
                 ))}
               </select>
               <span className="text-[0.9rem] text-muted-foreground">
-                Kiwi reads aloud and listens in this language.
+                Kivi reads aloud and listens in this language.
               </span>
             </label>
           </div>

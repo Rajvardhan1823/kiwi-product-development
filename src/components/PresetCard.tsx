@@ -41,7 +41,7 @@ export function PresetCard({ preset, selected, recommended, onSelect }: Props) {
       <div className="rounded-xl bg-muted px-4 py-3">
         <WaveformBloom active={selected} flagAt={16} height={40} bars={26} />
         <div className="mt-3 flex items-center justify-between gap-2">
-          <span className="text-[0.8rem] text-muted-foreground">What Kiwi would flag:</span>
+          <span className="text-[0.8rem] text-muted-foreground">What this means in practice:</span>
           <FlagChip label={preset.exampleFlag} />
         </div>
       </div>

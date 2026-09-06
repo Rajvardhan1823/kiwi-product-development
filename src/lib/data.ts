@@ -1,4 +1,4 @@
-// Mocked data for the Kiwi prototype, everything is local and on-device in spirit.
+// Mocked data for the Kivi prototype, everything is local and on-device in spirit.
 
 export interface TherapyPreset {
   id: string;
@@ -12,26 +12,29 @@ export const PRESETS: TherapyPreset[] = [
   {
     id: "phonetic",
     name: "Phonetic Accuracy Focus",
-    consequence: "Kiwi will flag every dropped or altered sound.",
+    consequence: "Kivi will flag every dropped or altered sound.",
     detail:
       "Best when you and your clinician are working on specific sounds. Expect precise, honest feedback on each word.",
-    exampleFlag: "dropped /r/ in “around”",
+    exampleFlag:
+      "If a sound goes missing, for example the r at the start of a word, Kivi names the exact word and the exact sound, so you know precisely what to retry.",
   },
   {
     id: "pacing",
     name: "Pacing & Rhythm Focus",
-    consequence: "Kiwi will focus on speed and rhythm, not pronunciation.",
+    consequence: "Kivi will focus on speed and rhythm, not pronunciation.",
     detail:
-      "Best for rebuilding a steady, even pace. Kiwi listens for rushed or stretched stretches of speech.",
-    exampleFlag: "rushed phrase in “wenttothe”",
+      "Best for rebuilding a steady, even pace. Kivi listens for rushed or stretched stretches of speech.",
+    exampleFlag:
+      "If you speed up and your words run into each other, Kivi shows you the exact spot where the rush happened, so you can slow down there next time.",
   },
   {
     id: "fluency",
     name: "Conversational Fluency Focus",
     consequence: "Lighter feedback, for practising natural, connected speech.",
     detail:
-      "Best for everyday conversation practice. Kiwi only notes moments where speech broke down noticeably.",
-    exampleFlag: "long pause before “yesterday”",
+      "Best for everyday conversation practice. Kivi only notes moments where speech broke down noticeably.",
+    exampleFlag:
+      "If you get stuck, for example a long pause before a word, Kivi gently marks that moment and nothing else, so practice feels like real conversation.",
   },
 ];
 
@@ -199,6 +202,62 @@ export const LANGUAGES: PracticeLanguage[] = [
     native: "हिन्दी",
     title: "सुबह की सैर",
     text: "सात बजे मैं बगीचे में टहलने गया और पक्षियों की आवाज़ सुनी। हवा ठंडी थी और सड़क शांत थी।",
+  },
+  {
+    code: "bn-IN",
+    label: "Bengali",
+    native: "বাংলা",
+    title: "সকালের হাঁটা",
+    text: "সকাল সাতটায় আমি বাগানে হেঁটে পাখির ডাক শুনলাম। বাতাস ঠান্ডা ছিল আর রাস্তা একদম শান্ত।",
+  },
+  {
+    code: "ta-IN",
+    label: "Tamil",
+    native: "தமிழ்",
+    title: "காலை நடை",
+    text: "காலை ஏழு மணிக்கு நான் தோட்டத்தில் நடந்து பறவைகளின் சத்தத்தைக் கேட்டேன். காற்று குளிர்ந்தது, தெரு அமைதியாக இருந்தது.",
+  },
+  {
+    code: "te-IN",
+    label: "Telugu",
+    native: "తెలుగు",
+    title: "ఉదయపు నడక",
+    text: "ఉదయం ఏడు గంటలకు నేను తోటలో నడుస్తూ పక్షుల కూత విన్నాను. గాలి చల్లగా ఉంది, వీధి నిశ్శబ్దంగా ఉంది.",
+  },
+  {
+    code: "kn-IN",
+    label: "Kannada",
+    native: "ಕನ್ನಡ",
+    title: "ಬೆಳಗಿನ ನಡಿಗೆ",
+    text: "ಬೆಳಿಗ್ಗೆ ಏಳು ಗಂಟೆಗೆ ನಾನು ತೋಟದಲ್ಲಿ ನಡೆದು ಹಕ್ಕಿಗಳ ಸದ್ದು ಕೇಳಿದೆ. ಗಾಳಿ ತಂಪಾಗಿತ್ತು, ಬೀದಿ ಸುಮ್ಮನಿತ್ತು.",
+  },
+  {
+    code: "ml-IN",
+    label: "Malayalam",
+    native: "മലയാളം",
+    title: "രാവിലെ നടത്തം",
+    text: "രാവിലെ ഏഴ് മണിക്ക് ഞാൻ പൂന്തോട്ടത്തിൽ നടന്ന് പക്ഷികളുടെ ശബ്ദം കേട്ടു. കാറ്റ് തണുത്തിരുന്നു, തെരുവ് ശാന്തമായിരുന്നു.",
+  },
+  {
+    code: "mr-IN",
+    label: "Marathi",
+    native: "मराठी",
+    title: "सकाळची फेरफटका",
+    text: "सकाळी सात वाजता मी बागेत फिरत पक्ष्यांचा आवाज ऐकला. हवा गार होती आणि रस्ता शांत होता.",
+  },
+  {
+    code: "gu-IN",
+    label: "Gujarati",
+    native: "ગુજરાતી",
+    title: "સવારની સૈર",
+    text: "સવારે સાત વાગ્યે હું બગીચામાં ફર્યો અને પક્ષીઓનો અવાજ સાંભળ્યો. હવા ઠંડી હતી અને રસ્તો શાંત હતો.",
+  },
+  {
+    code: "pa-IN",
+    label: "Punjabi",
+    native: "ਪੰਜਾਬੀ",
+    title: "ਸਵੇਰ ਦੀ ਸੈਰ",
+    text: "ਸਵੇਰੇ ਸੱਤ ਵਜੇ ਮੈਂ ਬਾਗ਼ ਵਿੱਚ ਟਹਿਲਿਆ ਤੇ ਪੰਛੀਆਂ ਦੀ ਆਵਾਜ਼ ਸੁਣੀ। ਹਵਾ ਠੰਢੀ ਸੀ ਤੇ ਗਲੀ ਸ਼ਾਂਤ ਸੀ।",
   },
   {
     code: "es-ES",

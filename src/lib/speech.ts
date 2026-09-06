@@ -1,5 +1,5 @@
 /**
- * Real browser voice helpers for the Kiwi demo.
+ * Real browser voice helpers for the Kivi demo.
  * - speak(): reference audio via the built-in speech synthesiser.
  * - useMicLevel(): live microphone loudness for the waveform bloom.
  * - useDictation(): live word-by-word recognition where the browser supports it.
