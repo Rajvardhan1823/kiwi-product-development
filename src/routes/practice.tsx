@@ -5,7 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { FlagChip, FlagIcon } from "@/components/FlagChip";
 import { PresetCard } from "@/components/PresetCard";
 import { WaveformBloom } from "@/components/WaveformBloom";
-import { ASSIGNED_READING, DRILL_SENTENCES, MOCK_TRANSCRIPT, PRESETS, presetById } from "@/lib/data";
+import { ASSIGNED_READING, DRILL_SENTENCES, LANGUAGES, MOCK_TRANSCRIPT, PRESETS, languageByCode, presetById } from "@/lib/data";
 import { useSession } from "@/lib/session";
 import {
   compareToReference,
@@ -34,8 +34,9 @@ export const Route = createFileRoute("/practice")({
 type Phase = "idle" | "recording" | "done";
 
 function PracticeStudio() {
-  const { presetId, setPresetId, completeSession } = useSession();
+  const { presetId, setPresetId, completeSession, profile, setProfile } = useSession();
   const preset = presetById(presetId);
+  const language = languageByCode(profile.language);
   const [phase, setPhase] = useState<Phase>("idle");
   const [presetOpen, setPresetOpen] = useState(false);
   const [flaggedPassage, setFlaggedPassage] = useState(false);
@@ -67,13 +68,13 @@ function PracticeStudio() {
   const play = (text: string) => {
     if (!speechSupported()) return;
     setSpeaking(true);
-    void speak(text, { onEnd: () => setSpeaking(false) });
+    void speak(text, { lang: profile.language, onEnd: () => setSpeaking(false) });
   };
 
   // Live transcript from the microphone, compared with the reference reading.
   const liveTranscript = useMemo(
-    () => (liveWordsOn ? compareToReference(ASSIGNED_READING.text, liveWords) : []),
-    [liveWordsOn, liveWords],
+    () => (liveWordsOn ? compareToReference(language.text, liveWords) : []),
+    [liveWordsOn, liveWords, language.text],
   );
 
   // Simulated transcript (used only when the browser can't do live dictation).
@@ -106,7 +107,7 @@ function PracticeStudio() {
     try {
       micRef.current = await startMicLevel(setLevel);
       setUsedMic(true);
-      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words)) : null;
+      const dict = dictationSupported() ? startDictation((words) => setLiveWords(words), profile.language) : null;
       dictRef.current = dict;
       setLiveWordsOn(Boolean(dict));
     } catch {
@@ -160,19 +161,19 @@ function PracticeStudio() {
         <section aria-labelledby="reference-heading" className="rounded-2xl border border-border bg-card p-8">
           <div className="flex items-center justify-between gap-3">
             <h1 id="reference-heading" className="text-2xl font-medium tracking-tight">
-              {ASSIGNED_READING.title}
+              {language.title}
             </h1>
             <button
               type="button"
               aria-label="Play reference audio"
-              onClick={() => (speaking ? (stopSpeaking(), setSpeaking(false)) : play(ASSIGNED_READING.text))}
+              onClick={() => (speaking ? (stopSpeaking(), setSpeaking(false)) : play(language.text))}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg bg-secondary px-4 py-2 font-medium text-secondary-foreground hover:opacity-90"
             >
               {speaking ? <Square className="h-5 w-5" aria-hidden="true" /> : <Play className="h-5 w-5" aria-hidden="true" />}
               {speaking ? "Stop audio" : "Listen first"}
             </button>
           </div>
-          <p className="mt-5 text-2xl leading-relaxed">{ASSIGNED_READING.text}</p>
+          <p className="mt-5 text-2xl leading-relaxed">{language.text}</p>
           <p className="mt-4 text-[0.9rem] text-muted-foreground">
             No timer, no countdown. Start whenever you're ready, stop whenever you like.
           </p>
@@ -187,7 +188,7 @@ function PracticeStudio() {
           </h2>
           <div className="mt-4 flex-1 rounded-xl bg-muted px-4 py-6">
             <WaveformBloom
-              active={phase === "recording" || speaking}
+              active={phase === "recording"}
               level={phase === "recording" && usedMic ? level : undefined}
               height={64}
               bars={32}
@@ -287,7 +288,7 @@ function PracticeStudio() {
           <div className="mt-3 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => play(ASSIGNED_READING.text)}
+              onClick={() => play(language.text)}
               className="kiwi-transition inline-flex min-h-11 items-center gap-2 rounded-lg border border-input bg-card px-4 py-2.5 font-medium hover:bg-accent"
             >
               <Play className="h-4.5 w-4.5" aria-hidden="true" /> Replay reference audio
@@ -365,7 +366,7 @@ function PracticeStudio() {
               ))}
             </ol>
             <div className="mt-6 flex items-center justify-between">
-              <WaveformBloom active={speaking} height={36} bars={20} />
+              <WaveformBloom height={36} bars={20} />
               <button
                 type="button"
                 onClick={() => setDrill(null)}
