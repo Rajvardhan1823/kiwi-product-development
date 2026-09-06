@@ -167,3 +167,107 @@ export const PATIENT_MISTAKES = [
 export function presetById(id: string): TherapyPreset {
   return PRESETS.find((p) => p.id === id) ?? PRESETS[0]!;
 }
+
+/* ---------- languages (patient side) ---------- */
+
+export interface PracticeLanguage {
+  code: string;
+  label: string;
+  native: string;
+  title: string;
+  text: string;
+}
+
+export const LANGUAGES: PracticeLanguage[] = [
+  {
+    code: "en-US",
+    label: "English (US)",
+    native: "English",
+    title: ASSIGNED_READING.title,
+    text: ASSIGNED_READING.text,
+  },
+  {
+    code: "en-IN",
+    label: "English (India)",
+    native: "English",
+    title: ASSIGNED_READING.title,
+    text: ASSIGNED_READING.text,
+  },
+  {
+    code: "hi-IN",
+    label: "Hindi",
+    native: "हिन्दी",
+    title: "सुबह की सैर",
+    text: "सात बजे मैं बगीचे में टहलने गया और पक्षियों की आवाज़ सुनी। हवा ठंडी थी और सड़क शांत थी।",
+  },
+  {
+    code: "es-ES",
+    label: "Spanish",
+    native: "Español",
+    title: "El paseo de la mañana",
+    text: "A las siete caminé por el jardín y escuché a los pájaros. El aire estaba fresco y la calle estaba tranquila.",
+  },
+  {
+    code: "fr-FR",
+    label: "French",
+    native: "Français",
+    title: "La promenade du matin",
+    text: "Vers sept heures, j'ai traversé le jardin et j'ai écouté les oiseaux. L'air était frais et la rue était calme.",
+  },
+];
+
+export function languageByCode(code: string): PracticeLanguage {
+  return LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0]!;
+}
+
+/* ---------- per-error recovery (patient dashboard) ---------- */
+
+export interface ErrorRecovery {
+  word: string;
+  sound: string;
+  label: string;
+  tip: string;
+  /** Times this slipped in each of the last six sessions, oldest first. */
+  history: number[];
+  practised: number;
+  goal: number;
+}
+
+export const ERROR_RECOVERY: ErrorRecovery[] = [
+  {
+    word: "around",
+    sound: "/r/ at the start",
+    label: "dropped sound",
+    tip: "Hold the /r/ a beat longer before the rest of the word.",
+    history: [5, 5, 4, 3, 3, 1],
+    practised: 18,
+    goal: 24,
+  },
+  {
+    word: "through",
+    sound: "“th” blend",
+    label: "altered sound",
+    tip: "Tongue lightly between the teeth, then let the air out.",
+    history: [4, 4, 4, 3, 2, 2],
+    practised: 12,
+    goal: 24,
+  },
+  {
+    word: "listened",
+    sound: "final “d”",
+    label: "dropped sound",
+    tip: "Land firmly on the ending instead of trailing off.",
+    history: [6, 5, 5, 4, 4, 3],
+    practised: 9,
+    goal: 24,
+  },
+  {
+    word: "street",
+    sound: "“str” blend",
+    label: "altered sound",
+    tip: "Slow into the first syllable so all three sounds get their turn.",
+    history: [3, 3, 2, 2, 1, 1],
+    practised: 21,
+    goal: 24,
+  },
+];
