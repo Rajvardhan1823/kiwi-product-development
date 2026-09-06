@@ -3,8 +3,9 @@ import { ArrowRight, BookOpenCheck, Download, Flame, Target, TrendingUp } from "
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { FlagChip } from "@/components/FlagChip";
+import { RecoveryBars } from "@/components/RecoveryBars";
 import { TrendChart } from "@/components/TrendChart";
-import { FLAG_LOG, PATIENT_MISTAKES, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
+import { ERROR_RECOVERY, FLAG_LOG, PATIENT_MISTAKES, PATIENT_TREND, TARGET_BANK } from "@/lib/data";
 import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/progress")({
@@ -93,7 +94,58 @@ function Progress() {
             </div>
           </div>
 
+          <div className="rounded-2xl border border-border bg-card p-8">
+            <h2 className="text-xl font-medium">Each sound, and how it is recovering</h2>
+            <p className="mt-1 text-[0.95rem] text-muted-foreground">
+              One card per sound you are working on. Shorter bars on the right mean it slipped less
+              often in your recent sessions.
+            </p>
+            <div className="mt-6 grid gap-5 md:grid-cols-2">
+              {ERROR_RECOVERY.map((e) => {
+                const first = e.history[0]!;
+                const now = e.history[e.history.length - 1]!;
+                const better = first - now;
+                const pct = first > 0 ? Math.round((better / first) * 100) : 0;
+                return (
+                  <article key={e.word} className="rounded-xl border border-border/70 bg-background p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-lg font-medium">“{e.word}”</p>
+                      <FlagChip label={e.label} />
+                    </div>
+                    <p className="mt-1 text-[0.9rem] text-muted-foreground">{e.sound}</p>
+                    <RecoveryBars
+                      history={e.history}
+                      label={`“${e.word}” slipped ${first} times six sessions ago and ${now} times in your latest session.`}
+                    />
+                    <p className="mt-3 inline-flex items-center gap-2 text-[0.95rem] font-medium text-sage-foreground">
+                      <TrendingUp className="h-5 w-5" aria-hidden="true" />
+                      {better > 0
+                        ? `${pct}% fewer slips than when you started`
+                        : "Holding steady, keep practising"}
+                    </p>
+                    <p className="mt-1 text-[0.9rem] text-muted-foreground">{e.tip}</p>
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between text-[0.85rem] text-muted-foreground">
+                        <span>Practice runs this month</span>
+                        <span className="font-metrics">
+                          {e.practised} of {e.goal}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 h-2.5 w-full rounded-full bg-muted">
+                        <div
+                          className="h-2.5 rounded-full bg-primary"
+                          style={{ width: `${Math.min(100, (e.practised / e.goal) * 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+
             <div className="rounded-2xl border border-border bg-card p-8">
               <h2 className="text-xl font-medium">Words Kiwi noticed in your last reading</h2>
               <p className="mt-1 text-[0.95rem] text-muted-foreground">
