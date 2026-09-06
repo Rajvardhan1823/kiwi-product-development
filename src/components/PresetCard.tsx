@@ -1,6 +1,5 @@
 import { BadgeCheck } from "lucide-react";
 import type { TherapyPreset } from "@/lib/data";
-import { FlagChip } from "./FlagChip";
 import { WaveformBloom } from "./WaveformBloom";
 
 interface Props {
