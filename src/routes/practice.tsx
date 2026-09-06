@@ -148,13 +148,30 @@ function PracticeStudio() {
           </span>
           <span className="text-[0.9rem] text-muted-foreground">{preset.consequence}</span>
         </div>
-        <button
-          type="button"
-          onClick={() => setPresetOpen(true)}
-          className="kiwi-transition inline-flex min-h-11 items-center rounded-lg border border-input bg-card px-4 py-2 text-[0.95rem] font-medium hover:bg-accent"
-        >
-          Change focus
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="inline-flex items-center gap-2 text-[0.9rem]">
+            <span className="text-muted-foreground">Language</span>
+            <select
+              value={profile.language}
+              onChange={(e) => setProfile({ language: e.target.value })}
+              className="min-h-11 rounded-lg border border-input bg-card px-3 py-2 text-[0.95rem] font-medium"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={() => setPresetOpen(true)}
+            className="kiwi-transition inline-flex min-h-11 items-center rounded-lg border border-input bg-card px-4 py-2 text-[0.95rem] font-medium hover:bg-accent"
+          >
+            Change focus
+          </button>
+        </div>
+
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
