@@ -109,14 +109,14 @@ export function dictationSupported() {
   return Boolean(w.SpeechRecognition || w.webkitSpeechRecognition);
 }
 
-export function startDictation(onWords: (words: string[], final: boolean) => void): { stop: () => void } | null {
+export function startDictation(onWords: (words: string[], final: boolean) => void, lang = "en-US"): { stop: () => void } | null {
   if (!dictationSupported()) return null;
   const w = window as unknown as { SpeechRecognition?: new () => SR; webkitSpeechRecognition?: new () => SR };
   const Ctor = w.SpeechRecognition ?? w.webkitSpeechRecognition!;
   const rec = new Ctor();
   rec.continuous = true;
   rec.interimResults = true;
-  rec.lang = "en-US";
+  rec.lang = lang;
   let finalText = "";
   rec.onresult = (e) => {
     let interim = "";
