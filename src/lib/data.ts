@@ -1,4 +1,4 @@
-// Mocked data for the Kiwi prototype — everything is local and on-device in spirit.
+// Mocked data for the Kiwi prototype, everything is local and on-device in spirit.
 
 export interface TherapyPreset {
   id: string;
@@ -23,7 +23,7 @@ export const PRESETS: TherapyPreset[] = [
     consequence: "Kiwi will focus on speed and rhythm, not pronunciation.",
     detail:
       "Best for rebuilding a steady, even pace. Kiwi listens for rushed or stretched stretches of speech.",
-    exampleFlag: "rushed phrase — “wenttothe”",
+    exampleFlag: "rushed phrase in “wenttothe”",
   },
   {
     id: "fluency",
@@ -147,21 +147,21 @@ export const PATIENTS = [
 ];
 
 export const FLAG_LOG = [
-  { date: "Sep 5", session: "The Morning Walk", patient: "Anand K.", flags: 3, top: "dropped /r/ — “around”", accuracy: 78 },
-  { date: "Sep 4", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "final /d/ — “listened”", accuracy: 76 },
+  { date: "Sep 5", session: "The Morning Walk", patient: "Anand K.", flags: 3, top: "dropped /r/ in “around”", accuracy: 78 },
+  { date: "Sep 4", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "final /d/ in “listened”", accuracy: 76 },
   { date: "Sep 4", session: "At the Market", patient: "Priya S.", flags: 5, top: "rushed middle syllables", accuracy: 69 },
-  { date: "Sep 3", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "dropped /r/ — “around”", accuracy: 74 },
-  { date: "Sep 3", session: "Phone Call Practice", patient: "Joseph M.", flags: 1, top: "long pause — “yesterday”", accuracy: 82 },
-  { date: "Sep 2", session: "The Morning Walk", patient: "Anand K.", flags: 6, top: "/θr/ cluster — “through”", accuracy: 71 },
+  { date: "Sep 3", session: "The Morning Walk", patient: "Anand K.", flags: 4, top: "dropped /r/ in “around”", accuracy: 74 },
+  { date: "Sep 3", session: "Phone Call Practice", patient: "Joseph M.", flags: 1, top: "long pause in “yesterday”", accuracy: 82 },
+  { date: "Sep 2", session: "The Morning Walk", patient: "Anand K.", flags: 6, top: "/θr/ cluster in “through”", accuracy: 71 },
 ];
 
 export const PATIENT_TREND = [62, 65, 63, 68, 71, 74, 76, 78];
 
 export const PATIENT_MISTAKES = [
-  { word: "around", label: "dropped sound", tip: "The /r/ at the start went missing — try holding it a beat longer." },
-  { word: "through", label: "altered sound", tip: "The “th” came out closer to an “f” — tongue between the teeth." },
-  { word: "listened", label: "dropped sound", tip: "The ending was swallowed — land on the final “d”." },
-  { word: "street", label: "altered sound", tip: "The “str” cluster simplified — slow into the first syllable." },
+  { word: "around", label: "dropped sound", tip: "The /r/ at the start went missing, try holding it a beat longer." },
+  { word: "through", label: "altered sound", tip: "The “th” came out closer to an “f”, tongue between the teeth." },
+  { word: "listened", label: "dropped sound", tip: "The ending was swallowed, land on the final “d”." },
+  { word: "street", label: "altered sound", tip: "The “str” cluster simplified, slow into the first syllable." },
 ];
 
 export function presetById(id: string): TherapyPreset {

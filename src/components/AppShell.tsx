@@ -30,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className={`min-h-screen text-foreground ${clinician ? "bg-muted" : "bg-background"}`}>
-      {/* Mode band — makes it obvious whose screen this is, with no login needed */}
+      {/* Mode band, makes it obvious whose screen this is, with no login needed */}
       <div
         className={`w-full ${clinician ? "bg-foreground text-background" : "bg-secondary text-secondary-foreground"}`}
       >

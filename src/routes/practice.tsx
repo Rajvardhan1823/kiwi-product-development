@@ -20,9 +20,9 @@ import {
 export const Route = createFileRoute("/practice")({
   head: () => ({
     meta: [
-      { title: "Practice Studio — Kiwi" },
-      { name: "description", content: "Record against your reference reading. Kiwi flags dropped or altered sounds as you speak — honestly, never judgementally." },
-      { property: "og:title", content: "Practice Studio — Kiwi" },
+      { title: "Practice Studio | Kiwi" },
+      { name: "description", content: "Record against your reference reading. Kiwi flags dropped or altered sounds as you speak, honestly, never judgementally." },
+      { property: "og:title", content: "Practice Studio | Kiwi" },
       { property: "og:description", content: "Record against your reference reading with honest, near-live feedback." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -140,7 +140,7 @@ function PracticeStudio() {
 
   return (
     <AppShell>
-      {/* Persistent preset pill — never re-asked, always explained, one tap to change */}
+      {/* Persistent preset pill, never re-asked, always explained, one tap to change */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-3">
         <div className="flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5 text-[0.95rem] font-medium text-primary-foreground">
@@ -256,7 +256,7 @@ function PracticeStudio() {
         {phase === "idle" ? (
           <p className="mt-4 text-muted-foreground">
             Your transcript appears here as you speak. Flagged words are marked with an icon, an
-            amber underline, and a plain-language label — never just a colour.
+            amber underline, and a plain-language label, never just a colour.
           </p>
         ) : (
           <>
@@ -267,7 +267,7 @@ function PracticeStudio() {
                     key={i}
                     type="button"
                     onClick={() => openDrill(w.word)}
-                    title={`${w.flag} — tap to practise this word`}
+                    title={`${w.flag}, tap to practise this word`}
                     className="kiwi-transition rounded-md border-b-[3px] border-flag-foreground bg-flag px-1.5 font-medium text-flag-foreground hover:brightness-95"
                   >
                     <span className="inline-flex items-center gap-1.5">
@@ -291,7 +291,7 @@ function PracticeStudio() {
                     onClick={() => openDrill(w.word)}
                     className="kiwi-transition rounded-full hover:brightness-95"
                   >
-                    <FlagChip label={`${w.word.replace(/[^a-zA-Z,.'’]/g, "")} — ${w.flag}`} />
+                    <FlagChip label={`${w.word.replace(/[^a-zA-Z,.'’]/g, "")}, ${w.flag}`} />
                   </button>
                 ))}
               </div>
@@ -347,7 +347,7 @@ function PracticeStudio() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 id="drill-heading" className="text-2xl font-medium tracking-tight">
-                  Repetition loop — “{drill.word}”
+                  Repetition loop in “{drill.word}”
                 </h2>
                 <p className="mt-1 text-muted-foreground">
                   Kiwi built these practice sentences around the sound you flagged. Go slowly.
@@ -411,7 +411,7 @@ function PracticeStudio() {
                   What should Kiwi listen for?
                 </h2>
                 <p className="mt-1 text-muted-foreground">
-                  You can change this any time — it's your practice.
+                  You can change this any time, it's your practice.
                 </p>
               </div>
               <button

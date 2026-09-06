@@ -2,7 +2,7 @@ import { AlertTriangle, Gauge, VolumeX } from "lucide-react";
 
 /**
  * Flagged words always carry an icon and a plain-language label in addition to
- * the amber underline — colour is never the only signal.
+ * the amber underline, colour is never the only signal.
  */
 export function FlagIcon({ label, className = "h-4 w-4" }: { label: string; className?: string }) {
   if (label.includes("rushed") || label.includes("pause")) return <Gauge className={className} aria-hidden="true" />;

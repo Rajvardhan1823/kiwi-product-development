@@ -4,7 +4,7 @@ interface Props {
   height?: number;
 }
 
-/** Simple, calm line trend — no motion, no flashing. */
+/** Simple, calm line trend, no motion, no flashing. */
 export function TrendChart({ data, label, height = 160 }: Props) {
   const width = 420;
   const min = Math.min(...data) - 6;

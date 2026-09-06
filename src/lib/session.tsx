@@ -59,7 +59,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         if (typeof parsed.sessionsCompleted === "number") setSessionsCompleted(parsed.sessionsCompleted);
       }
     } catch {
-      // ignore — prototype only
+      // ignore, prototype only
     }
     setHydrated(true);
   }, []);

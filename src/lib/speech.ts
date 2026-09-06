@@ -3,7 +3,7 @@
  * - speak(): reference audio via the built-in speech synthesiser.
  * - useMicLevel(): live microphone loudness for the waveform bloom.
  * - useDictation(): live word-by-word recognition where the browser supports it.
- * Everything stays on the device — nothing is uploaded.
+ * Everything stays on the device, nothing is uploaded.
  */
 
 export function voicesReady(): Promise<void> {
