@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { BookOpenText, ChartLine, ClipboardList, Home, Mic, Stethoscope, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
-import { KiwiWordmark } from "./KiwiLogo";
+import { KiviWordmark } from "./KiviLogo";
 import { useSession, type Role } from "@/lib/session";
 
 const PATIENT_NAV = [
@@ -75,10 +75,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
           <Link
             to={clinician ? "/dashboard" : "/home"}
-            aria-label="Kiwi home"
+            aria-label="Kivi home"
             className="kiwi-transition flex items-center gap-3 hover:opacity-85"
           >
-            <KiwiWordmark className="h-8" />
+            <KiviWordmark className="h-8" />
             <span
               className={`hidden rounded-full px-2.5 py-0.5 text-[0.75rem] font-semibold uppercase tracking-wide sm:inline ${
                 clinician ? "bg-foreground text-background" : "bg-accent text-accent-foreground"

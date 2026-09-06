@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Kiwi design system — speech rehabilitation companion.
+ * Kivi design system — speech rehabilitation companion.
  * Calming teal/sage on warm cream. No true alert-red; flags use muted amber
  * and are always paired with an icon + label so meaning never depends on colour.
  * Roman (upright) type only — no italics anywhere in the product.

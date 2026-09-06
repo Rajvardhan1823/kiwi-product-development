@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, BookOpenText, Languages, Mic, Play, Sparkles, Square, Stethoscope, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
-import { KiwiBird, KiwiWordmark } from "@/components/KiwiLogo";
+import { KiviBird, KiviWordmark } from "@/components/KiviLogo";
 import { PresetCard } from "@/components/PresetCard";
 import { WaveformBloom } from "@/components/WaveformBloom";
 import { ASSIGNED_READING, LANGUAGES, PRESETS, languageByCode } from "@/lib/data";
@@ -11,13 +11,13 @@ import { speak, speechSupported, stopSpeaking } from "@/lib/speech";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Welcome to Kiwi | Speech Practice Companion" },
+      { title: "Welcome to Kivi | Speech Practice Companion" },
       {
         name: "description",
         content:
-          "Kiwi is a private, on device practice partner between speech therapy sessions. Get set up in four gentle steps.",
+          "Kivi is a private, on device practice partner between speech therapy sessions. Get set up in four gentle steps.",
       },
-      { property: "og:title", content: "Welcome to Kiwi" },
+      { property: "og:title", content: "Welcome to Kivi" },
       {
         property: "og:description",
         content: "A private, on device practice partner between speech therapy sessions.",
@@ -67,7 +67,7 @@ function Onboarding() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto flex max-w-3xl flex-col px-6 py-10">
         <div className="flex items-center justify-between">
-          <KiwiWordmark className="h-9" />
+          <KiviWordmark className="h-9" />
           <span className="font-metrics text-sm text-muted-foreground" aria-live="polite">
             Step {step + 1} of {TOTAL_STEPS}
           </span>
@@ -82,13 +82,13 @@ function Onboarding() {
         {step === 0 && (
           <section aria-labelledby="step-who" className="mt-12">
             <div className="flex justify-center">
-              <KiwiBird className="h-28 w-28" />
+              <KiviBird className="h-28 w-28" />
             </div>
             <h1 id="step-who" className="mt-8 text-center text-4xl font-medium tracking-tight">
               A practice partner that listens, and never judges.
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-center text-lg text-muted-foreground">
-              Kiwi helps you practise speaking between sessions with your clinician. It points out
+              Kivi helps you practise speaking between sessions with your clinician. It points out
               what it hears, honestly and kindly, so your progress is real, and yours.
             </p>
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -130,14 +130,14 @@ function Onboarding() {
         {step === 1 && (
           <section aria-labelledby="step-you" className="mt-12">
             <h1 id="step-you" className="text-3xl font-medium tracking-tight">
-              A few details, so Kiwi can greet you properly
+              A few details, so Kivi can greet you properly
             </h1>
             <p className="mt-2 text-muted-foreground">
               This stays on your device. There is no account and no password.
             </p>
             <div className="mt-8 grid gap-5 rounded-2xl border border-border bg-card p-8">
               <label className="grid gap-2">
-                <span className="font-medium">What should Kiwi call you?</span>
+                <span className="font-medium">What should Kivi call you?</span>
                 <input
                   value={profile.name}
                   onChange={(e) => setProfile({ name: e.target.value })}
@@ -172,7 +172,7 @@ function Onboarding() {
                   ))}
                 </select>
                 <span className="text-[0.9rem] text-muted-foreground">
-                  Kiwi will read aloud and listen in this language. You can change it any time.
+                  Kivi will read aloud and listen in this language. You can change it any time.
                 </span>
               </label>
               <label className="grid gap-2">
@@ -203,22 +203,22 @@ function Onboarding() {
                 {
                   icon: Play,
                   title: "1. You listen first",
-                  body: "Kiwi reads your passage aloud at a gentle pace, so you know how it should sound. You can replay it as often as you like.",
+                  body: "Kivi reads your passage aloud at a gentle pace, so you know how it should sound. You can replay it as often as you like.",
                 },
                 {
                   icon: Mic,
                   title: "2. You read it back",
-                  body: "Press the big button and speak. The bars move with your voice while you record, so you can see Kiwi is listening. Stop whenever you want.",
+                  body: "Press the big button and speak. The bars move with your voice while you record, so you can see Kivi is listening. Stop whenever you want.",
                 },
                 {
                   icon: Sparkles,
-                  title: "3. Kiwi shows what it heard",
+                  title: "3. Kivi shows what it heard",
                   body: "Your words appear on screen. Anything that came out differently gets a small marker and a plain sentence explaining what happened.",
                 },
                 {
                   icon: BookOpenText,
                   title: "4. You practise one word",
-                  body: "Tap a marked word and Kiwi builds four short sentences around that sound, and reads each one aloud for you.",
+                  body: "Tap a marked word and Kivi builds four short sentences around that sound, and reads each one aloud for you.",
                 },
               ].map(({ icon: Icon, title, body }) => (
                 <li key={title} className="flex gap-4 rounded-2xl border border-border bg-card p-6">
@@ -270,10 +270,10 @@ function Onboarding() {
         {step === 3 && (
           <section aria-labelledby="step-preset" className="mt-12">
             <h1 id="step-preset" className="text-3xl font-medium tracking-tight">
-              Before you start, what should Kiwi listen for?
+              Before you start, what should Kivi listen for?
             </h1>
             <p className="mt-2 text-muted-foreground">
-              This is your Therapy Preset. It decides what Kiwi points out while you practise. You
+              This is your Therapy Preset. It decides what Kivi points out while you practise. You
               can change it any time.
             </p>
             <div className="mt-8 grid gap-5">

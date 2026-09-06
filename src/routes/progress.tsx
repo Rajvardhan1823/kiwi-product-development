@@ -11,9 +11,9 @@ import { useSession } from "@/lib/session";
 export const Route = createFileRoute("/progress")({
   head: () => ({
     meta: [
-      { title: "Progress Report | Kiwi" },
+      { title: "Progress Report | Kivi" },
       { name: "description", content: "Your streak and clarity trend, plus an exportable phonetic accuracy log for your clinician." },
-      { property: "og:title", content: "Progress Report | Kiwi" },
+      { property: "og:title", content: "Progress Report | Kivi" },
       { property: "og:description", content: "Your streak and clarity trend across recent practice sessions." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -147,7 +147,7 @@ function Progress() {
           <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
 
             <div className="rounded-2xl border border-border bg-card p-8">
-              <h2 className="text-xl font-medium">Words Kiwi noticed in your last reading</h2>
+              <h2 className="text-xl font-medium">Words Kivi noticed in your last reading</h2>
               <p className="mt-1 text-[0.95rem] text-muted-foreground">
                 These aren't failures, they're the exact spots where practice pays off.
               </p>
@@ -208,7 +208,7 @@ function Progress() {
                   <tr className="border-b border-border text-[0.9rem] text-muted-foreground">
                     <th scope="col" className="py-3 pr-4 font-medium">Date</th>
                     <th scope="col" className="py-3 pr-4 font-medium">Reading</th>
-                    <th scope="col" className="py-3 pr-4 font-medium">Kiwi noticed</th>
+                    <th scope="col" className="py-3 pr-4 font-medium">Kivi noticed</th>
                     <th scope="col" className="py-3 font-medium">Clarity</th>
                   </tr>
                 </thead>
@@ -227,7 +227,7 @@ function Progress() {
               </table>
             </div>
             <p className="mt-6 text-[0.9rem] text-muted-foreground">
-              Kiwi shows you patterns honestly. It never smooths over a slip, and it never scolds you
+              Kivi shows you patterns honestly. It never smooths over a slip, and it never scolds you
               for one either.
             </p>
           </div>
@@ -281,7 +281,7 @@ function Progress() {
             ))}
           </ul>
           <p className="mt-6 text-[0.9rem] text-muted-foreground">
-            Kiwi flags patterns for your review. It does not diagnose, and it never smooths over an
+            Kivi flags patterns for your review. It does not diagnose, and it never smooths over an
             error.
           </p>
         </div>

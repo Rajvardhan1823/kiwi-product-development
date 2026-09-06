@@ -1,6 +1,5 @@
 import { BadgeCheck } from "lucide-react";
 import type { TherapyPreset } from "@/lib/data";
-import { FlagChip } from "./FlagChip";
 import { WaveformBloom } from "./WaveformBloom";
 
 interface Props {
@@ -40,10 +39,10 @@ export function PresetCard({ preset, selected, recommended, onSelect }: Props) {
       </div>
       <div className="rounded-xl bg-muted px-4 py-3">
         <WaveformBloom active={selected} flagAt={16} height={40} bars={26} />
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <span className="text-[0.8rem] text-muted-foreground">What Kiwi would flag:</span>
-          <FlagChip label={preset.exampleFlag} />
-        </div>
+        <p className="mt-3 text-[0.95rem] leading-relaxed text-muted-foreground">
+          <span className="font-medium text-foreground">What this means in practice: </span>
+          {preset.exampleFlag}
+        </p>
       </div>
       <span
         className={`kiwi-transition self-start rounded-lg px-4 py-2 text-[0.95rem] font-medium ${
